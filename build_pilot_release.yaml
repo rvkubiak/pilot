@@ -7,7 +7,12 @@ steps:
   id: "Touch required Kubernetes config"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
+  args: [ 'mkdir', '-p', '/workspace/go/src/istio.io/pilot' ]
+  id: "Setup Go workspace"
+
+- name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ './bin/upload-istioctl', '-r', '-p', "gs://$PROJECT_ID/pilot/$TAG_NAME" ]
+  env: ["GOPATH=/workspace/go"]
   id: "Upload istioctl"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
