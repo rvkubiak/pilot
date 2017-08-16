@@ -4,11 +4,14 @@
 steps:
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ 'touch', 'platform/kube/config' ]
+  id: "Touch required Kubernetes config"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ './bin/upload-istioctl', '-r', '-p', "gs://$PROJECT_ID/pilot/$TAG_NAME" ]
+  id: "Upload istioctl"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ 'bash', './bin/push-docker', '-hub', "gcr.io/$PROJECT_ID", '-tag', "$TAG_NAME" ]
+  id: "Upload container images"
 
 timeout: 1800s
