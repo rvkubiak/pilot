@@ -1,0 +1,14 @@
+# Used for automated builds triggered on Git tags pushed matching the regex:
+#   \d+\.\d+\.\d+
+
+steps:
+- name: 'gcr.io/$PROJECT_ID/istio-builder'
+  args: [ 'touch', 'platform/kube/config' ]
+
+- name: 'gcr.io/$PROJECT_ID/istio-builder'
+  args: [ './bin/upload-istioctl', '-r', '-p', "gs://$PROJECT_ID/pilot/$TAG_NAME" ]
+
+- name: 'gcr.io/$PROJECT_ID/istio-builder'
+  args: [ 'bash', './bin/push-docker', '-hub', "gcr.io/$PROJECT_ID", '-tag', "$TAG_NAME" ]
+
+timeout: 1800s
