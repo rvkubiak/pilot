@@ -7,7 +7,7 @@ steps:
   id: "Touch required Kubernetes config"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'mkdir', '-p', '/tmp/gopath/src/istio.io' ]
+  args: [ 'mkdir', '-p', '/tmp/gopath/src/istio.io/pilot' ]
   id: "Setup Go workspace"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
