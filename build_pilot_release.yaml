@@ -12,7 +12,7 @@ steps:
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ './bin/upload-istioctl', '-r', '-p', "gs://$PROJECT_ID/pilot/$TAG_NAME" ]
-  env: ["GOPATH=/workspace/go"]
+  env: ["GOPATH=/workspace"]
   id: "Upload istioctl"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
