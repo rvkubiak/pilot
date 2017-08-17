@@ -16,7 +16,7 @@ steps:
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ 'ln', '-s', '/workspace', '/tmp/gopath/src/istio.io/pilot' ]
-  entrypoint: '/bin/bash -c'
+  entrypoint: '/bin/bash'
   id: "Symlink Go workspace"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
