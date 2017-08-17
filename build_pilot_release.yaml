@@ -11,12 +11,12 @@ steps:
   id: "Setup Go workspace"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'ln', '-s', '/workspace', '/tmp/gopath/src/istio.io/pilot' ]
-  id: "Symlink Go workspace"
+  args: [ 'ls', '-laR', '/tmp/gopath/src/istio.io' ]
+  id: "Inspect Go symlink"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'ls', '-la', '/tmp/gopath/src/istio.io/pilot' ]
-  id: "Inspect Go symlink"
+  args: [ 'ln', '-s', '/workspace', '/tmp/gopath/src/istio.io/pilot' ]
+  id: "Symlink Go workspace"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ 'ls', '-lR', '/tmp/gopath' ]
