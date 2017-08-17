@@ -11,6 +11,10 @@ steps:
   id: "Setup Go workspace"
 
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
+  args: [ 'ln', '-s', '/workspace', '/workspace/src/istio.io/pilot' ]
+  id: "Symlink Go workspace"
+
+- name: 'gcr.io/$PROJECT_ID/istio-builder'
   args: [ './bin/upload-istioctl', '-r', '-p', "gs://$PROJECT_ID/pilot/$TAG_NAME" ]
   env: ["GOPATH=/workspace"]
   id: "Upload istioctl"
