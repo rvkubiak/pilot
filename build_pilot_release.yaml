@@ -3,32 +3,16 @@
 
 steps:
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'touch', 'platform/kube/config' ]
-  id: "Touch required Kubernetes config"
-
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'mkdir', '-p', '/tmp/gopath/src/istio.io' ]
-  id: "Setup Go workspace"
-
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'ls', '-laR', '/tmp/gopath/src/istio.io' ]
-  id: "Inspect Go symlink"
-
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'ln', '-s', '/workspace', '/tmp/gopath/src/istio.io/pilot' ]
-  id: "Symlink Go workspace"
-
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'ls', '-lR', '/tmp/gopath' ]
-  id: "Inspect Go workspace"
-
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ './bin/upload-istioctl', '-r', '-p', "gs://$PROJECT_ID/pilot/$TAG_NAME" ]
+  entrypoint: 'bash'
   env: ["GOPATH=/tmp/gopath"]
-  id: "Upload istioctl"
-
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
-  args: [ 'bash', './bin/push-docker', '-hub', "gcr.io/$PROJECT_ID", '-tag', "$TAG_NAME" ]
-  id: "Upload container images"
+  args:
+  - -c
+  -|
+   touch platform/kube/config
+   mkdir -p /tmp/gopath/src/istio.io
+   ln -s /workspace /tmp/gopath/src/istio.io/pilot
+   ls -lR /tmp/gopath
+  ./bin/upload-istioctl -r -p gs://$PROJECT_ID/pilot/$TAG_NAME
+  ./bin/push-docker -hub gcr.io/$PROJECT_ID -tag $TAG_NAME
 
 timeout: 1800s
