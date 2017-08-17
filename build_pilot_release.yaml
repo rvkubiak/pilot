@@ -7,12 +7,12 @@ steps:
   env: ["GOPATH=/tmp/gopath"]
   args:
   - -c
-  -|
-   touch platform/kube/config
-   mkdir -p /tmp/gopath/src/istio.io
-   ln -s /workspace /tmp/gopath/src/istio.io/pilot
-   ls -lR /tmp/gopath
-   ./bin/upload-istioctl -r -p gs://$PROJECT_ID/pilot/$TAG_NAME
-   ./bin/push-docker -hub gcr.io/$PROJECT_ID -tag $TAG_NAME
+  - |
+    touch platform/kube/config
+    mkdir -p /tmp/gopath/src/istio.io
+    ln -s /workspace /tmp/gopath/src/istio.io/pilot
+    ls -lR /tmp/gopath
+    ./bin/upload-istioctl -r -p gs://$PROJECT_ID/pilot/$TAG_NAME
+    ./bin/push-docker -hub gcr.io/$PROJECT_ID -tag $TAG_NAME
 
 timeout: 1800s
