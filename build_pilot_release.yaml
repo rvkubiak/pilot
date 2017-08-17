@@ -12,7 +12,7 @@ steps:
    mkdir -p /tmp/gopath/src/istio.io
    ln -s /workspace /tmp/gopath/src/istio.io/pilot
    ls -lR /tmp/gopath
-  ./bin/upload-istioctl -r -p gs://$PROJECT_ID/pilot/$TAG_NAME
-  ./bin/push-docker -hub gcr.io/$PROJECT_ID -tag $TAG_NAME
+   ./bin/upload-istioctl -r -p gs://$PROJECT_ID/pilot/$TAG_NAME
+   ./bin/push-docker -hub gcr.io/$PROJECT_ID -tag $TAG_NAME
 
 timeout: 1800s
