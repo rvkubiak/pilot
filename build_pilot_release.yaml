@@ -8,6 +8,7 @@ steps:
   args:
   - -c
   - |
+    env
     touch platform/kube/config
     mkdir -p /tmp/gopath/src/istio.io
     ln -s /workspace /tmp/gopath/src/istio.io/pilot
