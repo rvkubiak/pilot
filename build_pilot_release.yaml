@@ -8,11 +8,13 @@ steps:
   args:
   - -c
   - |
-    env
-    touch platform/kube/config
+    set -o errexit
+    set -o nounset
+    set -o pipefailset -x
     mkdir -p /tmp/gopath/src/istio.io
-    ln -s /workspace /tmp/gopath/src/istio.io/pilot
+    mv /workspace /tmp/gopath/src/istio.io/pilot
     cd /tmp/gopath/src/istio.io/pilot
+    touch platform/kube/config
     ./bin/upload-istioctl -r -p gs://$PROJECT_ID/pilot/$TAG_NAME
     ./bin/push-docker -hub gcr.io/$PROJECT_ID -tag $TAG_NAME
 
