@@ -4,7 +4,7 @@
 steps:
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   entrypoint: 'bash'
-  env: ["GOPATH=/tmp/gopath"]
+  env: ["GOPATH=/tmp/gopath", "GOROOT=/usr/local/go"]
   args:
   - -c
   - |
