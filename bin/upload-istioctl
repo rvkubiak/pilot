@@ -36,7 +36,6 @@ cp -f "${ROOT}/bazel-bin/cmd/istioctl/istioctl" "${BIN_DIR}/istioctl-linux"
 
 
 if [[ ${RELEASE} == true ]]; then
-  ls -lLR ${ROOT}
   export GOROOT="$(find ${ROOT}/bazel-${DIR_NAME}/external -type d -name 'go1_*')"
   go=${GOROOT}/bin/go
 
