@@ -10,7 +10,8 @@ steps:
   - |
     set -o errexit
     set -o nounset
-    set -o pipefailset -x
+    set -o pipefail
+    set -x
     mkdir -p /tmp/gopath/src/istio.io
     mv /workspace /tmp/gopath/src/istio.io/pilot
     cd /tmp/gopath/src/istio.io/pilot
