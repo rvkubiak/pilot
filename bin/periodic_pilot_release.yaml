@@ -1,0 +1,12 @@
+# Used for periodic automated builds.
+# To execute a build manually submit a job that specifies a version:
+#   gcloud container builds submit --config bin/periodic_pilot_release.yaml \
+#       --substitutions=_VERSION=foo --no-source
+
+steps:
+- name: 'gcr.io/$PROJECT_ID/istio-builder'
+  entrypoint: 'bash'
+  env: [ "GOPATH=/tmp/gopath" ]
+  args: [ "./bin/release.sh", "-v", "$_VERSION", "-h", "gcr.io/istio-builder-prototype", "-b", "istio-builder-prototype" ]
+
+timeout: 1800s

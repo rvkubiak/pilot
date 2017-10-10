@@ -7,6 +7,7 @@ set -x
 
 function usage() {
   echo "$0 \
+    -b <GCS bucket for release artifacts> \
     -i <gcloud project ID name> \
     -t <tag name to apply to artifacts> \
     -v <version to apply instead of tag>"
@@ -14,12 +15,16 @@ function usage() {
 }
 
 # Initialize variables
+BUCKET="istio-release"
+HUBS="gcr.io/istio-io,docker.io/istio"
 TAG_NAME=""
 VERSION_OVERRIDE=""
 
 # Handle command line args
-while getopts t:v: arg ; do
+while getopts b:h:t:v: arg ; do
   case "${arg}" in
+    b) BUCKET="${OPTARG}";;
+    h) HUBS="${OPTARG}";;
     t) TAG_NAME="${OPTARG}";;
     v) VERSION_OVERRIDE="${OPTARG}";;
     *) usage;;
@@ -42,16 +47,18 @@ cd /tmp/gopath/src/istio.io/pilot
 touch platform/kube/config
 
 # Download and set the credentials for docker.io/istio hub
-#mkdir -p "${HOME}/.docker"
-#gsutil cp gs://istio-secrets/dockerhub_config.json.enc "${HOME}/.docker/config.json.enc"
-#gcloud kms decrypt \
-#       --ciphertext-file="${HOME}/.docker/config.json.enc" \
-#       --plaintext-file="${HOME}/.docker/config.json" \
-#       --location=global \
-#       --keyring=Secrets \
-#       --key=DockerHub
+if [[ "$HUBS" == *"docker.io"* ]] ; then
+  mkdir -p "${HOME}/.docker"
+  gsutil cp gs://istio-secrets/dockerhub_config.json.enc "${HOME}/.docker/config.json.enc"
+  gcloud kms decrypt \
+         --ciphertext-file="${HOME}/.docker/config.json.enc" \
+         --plaintext-file="${HOME}/.docker/config.json" \
+         --location=global \
+         --keyring=Secrets \
+         --key=DockerHub
+fi
 
 # Build istioctl binaries and upload to GCS
-./bin/upload-istioctl -r -p gs://istio-release/releases/"${version}"/istioctl
+./bin/upload-istioctl -r -p gs://${BUCKET}/releases/"${version}"/istioctl
 
-#./bin/push-docker -hub gcr.io/istio-io,docker.io/istio -tag "${version}"
+./bin/push-docker -hub "${HUBS}" -tag "${version}"
