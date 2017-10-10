@@ -4,9 +4,13 @@
 #       --substitutions=_VERSION=foo --no-source
 
 steps:
+- name: 'gcr.io/cloud-builders/git'
+  args: [ "clone", "https://github.com/rvkubiak/pilot" ]
+
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   entrypoint: 'bash'
   env: [ "GOPATH=/tmp/gopath" ]
   args: [ "./bin/release.sh", "-v", "$_VERSION", "-h", "gcr.io/istio-builder-prototype", "-b", "istio-builder-prototype" ]
+  dir: "pilot"
 
 timeout: 1800s
