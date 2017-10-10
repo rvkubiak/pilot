@@ -8,25 +8,30 @@ set -x
 function usage() {
   echo "$0 \
     -i <gcloud project ID name> \
-    -t <tag name to apply to artifacts>"
+    -t <tag name to apply to artifacts> \
+    -v <version to apply instead of tag>"
   exit 1
 }
 
 # Initialize variables
-PROJECT_ID=""
 TAG_NAME=""
+VERSION_OVERRIDE=""
 
 # Handle command line args
-while getopts i:t: arg ; do
+while getopts t:v: arg ; do
   case "${arg}" in
-    i) PROJECT_ID="${OPTARG}";;
     t) TAG_NAME="${OPTARG}";;
+    v) VERSION_OVERRIDE="${OPTARG}";;
     *) usage;;
   esac
 done
 
-if [ ! "${PROJECT_ID}" ] || [ ! "${TAG_NAME}" ] ; then
-  echo "-i and -t are required arguments"
+if [ ! -z "${VERSION_OVERRIDE}" ] ; then
+  version="${VERSION_OVERRIDE}"
+elif [ ! -z "${TAG_NAME}" ] ; then
+  version="${TAG_NAME}"
+else
+  echo "Either -t or -v is a required argument."
   usage
 fi
 
@@ -47,6 +52,6 @@ gcloud kms decrypt \
        --key=DockerHub
 
 # Build istioctl binaries and upload to GCS
-./bin/upload-istioctl -r -p gs://istio-release/releases/"${TAG_NAME}"/istioctl
+./bin/upload-istioctl -r -p gs://istio-release/releases/"${version}"/istioctl
 
-./bin/push-docker -hub gcr.io/istio-io,docker.io/istio -tag "${TAG_NAME}"
+./bin/push-docker -hub gcr.io/istio-io,docker.io/istio -tag "${version}"
