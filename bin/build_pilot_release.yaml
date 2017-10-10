@@ -1,10 +1,12 @@
 # Used for automated builds triggered on Git tags pushed matching the regex:
 #   \d+\.\d+\.\d+
+# To launch a manual build run from a Pilot checkout run:
+#   gcloud container builds submit --config build_pilot_release.yaml --subtitutions _VERSION=foo .
 
 steps:
 - name: 'gcr.io/$PROJECT_ID/istio-builder'
   entrypoint: 'bash'
   env: [ "GOPATH=/tmp/gopath" ]
-  args: [ "./bin/release.sh", "-i", "$PROJECT_ID", "-t", "$TAG_NAME" ]
+  args: [ "./bin/release.sh", "-t", "$TAG_NAME", "-v", "$_VERSION" ]
 
 timeout: 1800s
