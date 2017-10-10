@@ -7,7 +7,7 @@ steps:
 - name: 'gcr.io/cloud-builders/git'
   args: [ "clone", "https://github.com/rvkubiak/pilot" ]
 
-- name: 'gcr.io/$PROJECT_ID/istio-builder'
+- name: 'gcr.io/istio-io/istio-builder'
   entrypoint: 'bash'
   env: [ "GOPATH=/tmp/gopath" ]
   args: [ "./bin/release.sh", "-v", "$_VERSION", "-h", "gcr.io/istio-builder-prototype", "-b", "istio-builder-prototype" ]
